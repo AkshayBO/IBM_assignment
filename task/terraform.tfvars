@@ -1,7 +1,7 @@
 lambda_role_name = "s3_lambda_iam_role"
 lambda_iam_policy_name = "s3__lambda_iam_policy"
 function_name          = "S3_lambda-final"
-handler_name           = "lambda_function"
+handler_name           = "lambda_handler"
 runtime                = "python3.9"
 timeout                = "900"
 bucket_name            = "ibm-assignment-bucket-create"
