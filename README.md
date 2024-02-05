@@ -1,4 +1,4 @@
-# demicon-poc
+# IBM-ASSIGNMENT
 
 # directory structure.
 
