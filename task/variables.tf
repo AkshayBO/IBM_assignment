@@ -16,19 +16,9 @@ variable "runtime" {
 variable "timeout" {
   default = ""
 }
-variable "environment" {
-  default = "dev"
-}
 variable "bucket_name" {
   default= ""
 }
-variable "retry"{
-  default=""
-}
-variable "file_name"{
-  default=""
-}
-
-variable "resource_name"{
-  default=""
+variable "state_bucket_name"
+  default= ""
 }

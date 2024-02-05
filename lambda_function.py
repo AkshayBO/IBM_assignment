@@ -8,7 +8,6 @@ REDIS_ENDPOINT=os.environ["REDIS_ENDPOINT"]
 
 def lambda_handler(event, context):
     try:
-      bucket = event['Records'][0]['s3']['bucket']['name']
       key = event['Records'][0]['s3']['object']['key']
       creation_timestamp = str(datetime.datetime.now())
       data = {
@@ -19,7 +18,7 @@ def lambda_handler(event, context):
       redis_client = boto3.client('elasticache')
       try:
         response = redis_client.put_item(
-            CacheClusterId='your-redis-cluster-id',
+            CacheClusterId='my-redis-cluster',
             Key=key,
             Value=json_data
         )

@@ -1,11 +1,11 @@
 
 resource "aws_s3_bucket" "my_bucket" {
-  bucket = "your-unique-bucket-name"     # Change this to a unique bucket name
+  bucket = var.bucket_name     # Change this to a unique bucket name
   acl    = "private"
 }
 
 resource "aws_s3_bucket" "my_state_bucket" {
-  bucket = "your-unique-bucket-name" # Change this to a unique bucket name
+  bucket = var.state_bucket_name # Change this to a unique bucket name
   acl    = "private"
   key    = "terraform/state/"
 
@@ -109,7 +109,7 @@ resource "aws_s3_bucket_notification" "s3_bucket_notification" {
   bucket = aws_s3_bucket.my_bucket.id
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.my_lambda_function.arn
+    lambda_function_arn = aws_lambda_function.test_lambda.arn
     events              = ["s3:ObjectCreated", "s3:ObjectUpdated"]
   }
 }
