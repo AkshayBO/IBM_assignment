@@ -1,9 +1,11 @@
 
+# created bucket to apply lambda trigger on it
 resource "aws_s3_bucket" "my_bucket" {
   bucket = var.bucket_name     # Change this to a unique bucket name
   acl    = "private"
 }
 
+# created bucket to store state file
 resource "aws_s3_bucket" "my_state_bucket" {
   bucket = var.state_bucket_name # Change this to a unique bucket name
   acl    = "private"
@@ -14,7 +16,7 @@ resource "aws_s3_bucket" "my_state_bucket" {
   }
 }
 
-
+#This will create elasticache(redis) single node cluster
 resource "aws_elasticache_cluster" "my_redis_cluster" {
   cluster_id           = "my-redis-cluster"
   engine               = "redis"
@@ -25,7 +27,7 @@ resource "aws_elasticache_cluster" "my_redis_cluster" {
 }
 
 
-# Creating Lambda IAM resource
+# Creating Lambda IAM resource(role)
 resource "aws_iam_role" "lambda_iam" {
   name = var.lambda_role_name
 
@@ -45,6 +47,7 @@ resource "aws_iam_role" "lambda_iam" {
 EOF
 }
 
+# Creating Lambda IAM resource(policies)
 resource "aws_iam_role_policy" "revoke_keys_role_policy" {
   name = var.lambda_iam_policy_name
   role = aws_iam_role.lambda_iam.id
@@ -72,7 +75,7 @@ EOF
 }
 
 
-
+# This will create lambda function
 resource "aws_lambda_function" "test_lambda" {
   function_name    = var.function_name
   role             = aws_iam_role.lambda_iam.arn
@@ -89,13 +92,13 @@ resource "aws_lambda_function" "test_lambda" {
   }
 }
 
-
+# attching policy to created role
 resource "aws_iam_role_policy_attachment" "lambda_execution_attachment" {
   policy_arn = aws_iam_policy.revoke_keys_role_policy.arn
   role       = aws_iam_role.lambda_iam.name
 }
 
-
+#  grant permission for an AWS Lambda function to be invoked by an S3 event
 resource "aws_lambda_permission" "allow_s3" {
   statement_id  = "AllowExecutionFromS3"
   action        = "lambda:InvokeFunction"
@@ -104,7 +107,7 @@ resource "aws_lambda_permission" "allow_s3" {
   source_arn    = aws_lambda_function.test_lambda.arn
 }
 
-
+# invoking an AWS Lambda function in response to events occurring within the S3 bucket.
 resource "aws_s3_bucket_notification" "s3_bucket_notification" {
   bucket = aws_s3_bucket.my_bucket.id
 
